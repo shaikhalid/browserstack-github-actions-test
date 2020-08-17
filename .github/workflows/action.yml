@@ -1,0 +1,106 @@
+name: 'BrowserStack Test'
+on: [push, pull_request]
+
+jobs:
+  ubuntu-job:
+    name: 'BrowserStack Test on Ubuntu'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'BrowserStack Env Setup'
+        uses: 'rchougule/local-action/setup-env@master'
+        with:
+          username:  ${{ secrets.BROWSERSTACK_USERNAME }}
+          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          build-name: Ubuntu Regression Build -> BUILD_INFO
+          # local-testing: start
+          # local-logging-level: all-logs
+          # build-name: PRNUM-PRNAME-COMMITID-COMMITMESSAGE
+          # local-args: '--only-automate --daemon start --key jinga --local-identifier this-is-mine'
+          # local-identifier: random
+      - name: 'BrowserStackLocal Setup'
+        uses: 'rchougule/local-action/setup-local@master'
+        with:
+          local-testing: start
+          # local-logging-level: all-logs
+          local-identifier: random
+      - name: 'checkout the repository'
+        uses: 'actions/checkout@v2'
+      - name: 'running npm install'
+        run: 'npm install'
+      - name: 'running http-server'
+        run: './node_modules/.bin/http-server -p 8099 &'
+      - name: 'run test'
+        run: 'node index.js'
+        env:
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}  
+      - name: 'BrowserStackLocal Stop'
+        uses: 'rchougule/local-action/setup-local@master'
+        with:
+          local-testing: stop
+      - name: 'running test again'
+        run: 'node another.js'
+  # macos-job:
+  #   name: 'BrowserStack-Job on Mac OS'
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: 'fetching local'
+  #       uses: 'rchougule/local-action@master'
+  #       with:
+  #         local-testing: 'start'
+  #         local-identifier: 'random'
+  #         # build-name: 'MacOS build-meta#'
+  #         username:  ${{ secrets.BROWSERSTACK_USERNAME }}
+  #         access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+  #         local-args: '--only-automate --daemon start --key jinga --local-identifier this-is-mine'
+  #     - name: 'checkout the repository'
+  #       uses: 'actions/checkout@v2'
+  #     - name: 'running npm install'
+  #       run: 'npm install'
+  #     - name: 'running http-server'
+  #       run: './node_modules/.bin/http-server -p 8099 &'
+  #     - name: 'run test'
+  #       run: 'node index.js'
+  #     - name: 'stopping local'
+  #       uses: 'rchougule/local-action@master'
+  #       with:
+  #         local-testing: stop
+  #         username: ${{ secrets.BROWSERSTACK_USERNAME }}
+  #         access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+  #         local-identifier: random
+  #         # build-name: 'jinga'
+  #         # local-args: 'doesnt matter'
+  #     - name: 'running test again'
+  #       run: 'node another.js'
+  # windows-job:
+  #   name: 'BrowserStack-Job on Windows'
+  #   runs-on: windows-latest
+  #   steps:
+  #     - name: 'fetching local'
+  #       uses: 'rchougule/local-action@master'
+  #       with:
+  #         local-testing: 'start'
+  #         # local-logging-level: 'false'
+  #         local-identifier: random doesnt matter i think
+  #         # build-name: 'meta#-windows-build'
+  #         username:  ${{ secrets.BROWSERSTACK_USERNAME }}
+  #         access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+  #         # local-args: '--only-automate --daemon start --key jinga --local-identifier this-is-mine'
+  #     - name: 'checkout the repository'
+  #       uses: 'actions/checkout@v2'
+  #     - name: 'running npm install'
+  #       run: 'npm install'
+  #     - name: 'running http-server'
+  #       run: './node_modules/.bin/http-server -p 8099 &'
+  #     - name: 'run test'
+  #       run: 'node index.js'
+  #     - name: 'stopping local'
+  #       uses: 'rchougule/local-action@master'
+  #       with:
+  #         local-testing: 'stop'
+  #         local-logging-level: 'all-logs'
+  #         local-identifier: random doesnt matter i think
+  #         username:  ${{ secrets.BROWSERSTACK_USERNAME }}
+  #         access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+  #     - name: 'running test again'
+  #       run: 'node another.js'
