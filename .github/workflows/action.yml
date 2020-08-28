@@ -30,5 +30,3 @@ jobs:
         uses: 'browserstack/github-actions/setup-local@master'
         with:
           local-testing: stop
-      - name: 'running test again'
-        run: 'node another.js'
