@@ -16,7 +16,7 @@ jobs:
         uses: 'browserstack/github-actions/setup-local@master'
         with:
           local-testing: start
-          # local-logging-level: all-logs
+          local-logging-level: all-logs
           local-identifier: random
       - name: 'checkout the repository'
         uses: 'actions/checkout@v2'
