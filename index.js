@@ -10,7 +10,7 @@ var capabilities = {
   'os_version': 'high sierra',
   'browserstack.local': 'true',
   'browserstack.localIdentifier': process.env.BROWSERSTACK_LOCAL_IDENTIFIER,
-  'browserstack.user': 'souravkundu5',
+  'browserstack.user': 'process.env.BROWSERSTACK_USERNAME',
   'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY
 }
 
